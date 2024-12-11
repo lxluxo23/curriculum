@@ -1,6 +1,12 @@
 import React from 'react';
 import { Briefcase, Wrench } from 'lucide-react';
 
+const TechnologyBadge = ({ name, color = "blue" }) => (
+  <span className={`bg-${color}-100 text-${color}-800 px-3 py-1 rounded-full text-sm`}>
+    {name}
+  </span>
+);
+
 const WorkExperience = () => {
   const experiences = [
     {
@@ -25,26 +31,16 @@ const WorkExperience = () => {
             "Cumplimiento de requerimientos normativos del Instituto de Seguridad Laboral (ISL)"
           ],
           technologies: [
-            {
-              name: "Spring Boot y Apache Camel",
-              description: "Desarrollo de servicios REST, facilitando integración y manejo de procesos de negocio"
-            },
-            {
-              name: "Angular (v8)",
-              description: "Desarrollo frontend, creando interfaces interactivas y responsivas"
-            },
-            {
-              name: "Git y Gitflow",
-              description: "Control de versiones y gestión del flujo de trabajo"
-            },
-            {
-              name: "JBoss Fuse EAP y SQL Server",
-              description: "Servidor de aplicaciones y gestión de base de datos"
-            },
-            {
-              name: "SCRUM",
-              description: "Metodología ágil para planificación y desarrollo iterativo"
-            }
+            "Spring Boot",
+            "Apache Camel",
+            "Angular 8",
+            "Git",
+            "Gitflow",
+            "JBoss Fuse EAP",
+            "SQL Server",
+            "SCRUM",
+            "SOAP",
+            "JAXB"
           ]
         }
       ]
@@ -61,6 +57,16 @@ const WorkExperience = () => {
         "Administración de aplicaciones en servidores ECS Cloud (Huawei Cloud)",
         "Gestión de página del dominio principal gasmaule.cl",
         "Administración de Azure AD para correos institucionales"
+      ],
+      technologies: [
+        "Laravel",
+        "Android Studio",
+        "Flutter",
+        "Huawei Cloud",
+        "Azure AD",
+        "PHP",
+        "MySQL",
+        "Git"
       ]
     },
     {
@@ -84,7 +90,9 @@ const WorkExperience = () => {
         "Linux",
         "SSH",
         "PM2",
-        "Sequelize ORM"
+        "Sequelize ORM",
+        "REST API",
+        "JWT"
       ]
     },
     {
@@ -94,7 +102,17 @@ const WorkExperience = () => {
       position: "Soporte Informático en Terreno",
       responsibilities: [
         "Asistencia técnica para equipos Totalpack, incluyendo instalaciones y mantención de hardware",
-        "Asistencia técnica para Atos, incluyendo instalación de telefonía IP y configuración de centrales telefónicas"
+        "Asistencia técnica para Atos, incluyendo instalación de telefonía IP y configuración de centrales telefónicas",
+        "Mantenimiento preventivo y correctivo de equipos",
+        "Configuración y mantenimiento de redes",
+        "Soporte técnico a usuarios finales"
+      ],
+      technologies: [
+        "Windows Server",
+        "Redes IP",
+        "VoIP",
+        "Hardware",
+        "Soporte Técnico"
       ]
     },
     {
@@ -104,7 +122,18 @@ const WorkExperience = () => {
       position: "Encargado Informático",
       responsibilities: [
         "Soporte informático general",
-        "Administración de red interna"
+        "Administración de red interna",
+        "Mantenimiento de equipos computacionales",
+        "Gestión de sistemas de información educativa",
+        "Soporte a usuarios (profesores y personal administrativo)",
+        "Mantenimiento de infraestructura de red"
+      ],
+      technologies: [
+        "Windows Server",
+        "Redes LAN/WAN",
+        "Active Directory",
+        "Soporte Técnico",
+        "Sistemas Educativos"
       ]
     },
     {
@@ -115,7 +144,19 @@ const WorkExperience = () => {
       responsibilities: [
         "Administración y soporte de sistema propietario de procesos internos",
         "Soporte informático general",
-        "Desarrollo de sistemas auxiliares en PHP"
+        "Desarrollo de sistemas auxiliares en PHP",
+        "Mantenimiento de equipos médicos computarizados",
+        "Soporte a usuarios del sistema clínico",
+        "Gestión de respaldos y seguridad de datos"
+      ],
+      technologies: [
+        "PHP",
+        "MySQL",
+        "Windows Server",
+        "Sistemas Clínicos",
+        "Redes",
+        "Backups",
+        "Soporte Técnico"
       ]
     }
   ];
@@ -139,61 +180,60 @@ const WorkExperience = () => {
               <span className="text-gray-600 font-medium">{exp.period}</span>
             </div>
 
+            {exp.description && (
+              <p className="text-gray-600 mb-4">{exp.description}</p>
+            )}
+
             {exp.projects && exp.projects.map((project, pIndex) => (
               <div key={pIndex} className="mt-4">
                 <h4 className="text-lg font-semibold text-gray-700 mb-2">{project.name}</h4>
-                <div className="space-y-4">
-                  {project.description && (
-                    <p className="text-gray-600">{project.description}</p>
-                  )}
-                  
-                  {project.responsibilities && (
-                    <div className="pl-4">
-                      <ul className="list-disc space-y-2">
-                        {project.responsibilities.map((resp, rIndex) => (
-                          <li key={rIndex} className="text-gray-600">{resp}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
+                <p className="text-gray-600 mb-3">{project.description}</p>
+                
+                {project.responsibilities && (
+                  <div className="mb-4">
+                    <ul className="list-disc pl-4 space-y-2">
+                      {project.responsibilities.map((resp, rIndex) => (
+                        <li key={rIndex} className="text-gray-600">{resp}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
 
-                  {project.integrations && (
-                    <div className="mt-4">
-                      <h5 className="font-semibold text-gray-700 mb-2 flex items-center gap-2">
-                        <Wrench className="w-4 h-4" />
-                        Integraciones
-                      </h5>
-                      <ul className="list-disc pl-4 space-y-2">
-                        {project.integrations.map((int, iIndex) => (
-                          <li key={iIndex} className="text-gray-600">{int}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
+                {project.integrations && (
+                  <div className="mb-4">
+                    <h5 className="font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                      <Wrench className="w-4 h-4" />
+                      Integraciones
+                    </h5>
+                    <ul className="list-disc pl-4 space-y-2">
+                      {project.integrations.map((int, iIndex) => (
+                        <li key={iIndex} className="text-gray-600">{int}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
 
-                  {project.technologies && (
-                    <div className="mt-4">
-                      <h5 className="font-semibold text-gray-700 mb-2">Tecnologías</h5>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {project.technologies.map((tech, tIndex) => (
-                          <div key={tIndex} className="bg-gray-50 p-3 rounded">
-                            <span className="font-medium text-gray-700">{tech.name}: </span>
-                            <span className="text-gray-600">{tech.description}</span>
-                          </div>
-                        ))}
-                      </div>
+                {project.technologies && (
+                  <div className="mt-4">
+                    <h5 className="font-semibold text-gray-700 mb-2">Tecnologías</h5>
+                    <div className="flex flex-wrap gap-2">
+                      {project.technologies.map((tech, tIndex) => (
+                        <TechnologyBadge key={tIndex} name={tech} />
+                      ))}
                     </div>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             ))}
 
             {exp.responsibilities && (
-              <ul className="list-disc pl-4 mt-4 space-y-2">
-                {exp.responsibilities.map((resp, rIndex) => (
-                  <li key={rIndex} className="text-gray-600">{resp}</li>
-                ))}
-              </ul>
+              <div className="mt-4">
+                <ul className="list-disc pl-4 space-y-2">
+                  {exp.responsibilities.map((resp, rIndex) => (
+                    <li key={rIndex} className="text-gray-600">{resp}</li>
+                  ))}
+                </ul>
+              </div>
             )}
 
             {exp.achievements && (
@@ -207,14 +247,12 @@ const WorkExperience = () => {
               </div>
             )}
 
-            {exp.technologies && Array.isArray(exp.technologies) && (
+            {exp.technologies && (
               <div className="mt-4">
                 <h4 className="font-semibold text-gray-700 mb-2">Tecnologías utilizadas</h4>
                 <div className="flex flex-wrap gap-2">
                   {exp.technologies.map((tech, tIndex) => (
-                    <span key={tIndex} className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">
-                      {tech}
-                    </span>
+                    <TechnologyBadge key={tIndex} name={tech} />
                   ))}
                 </div>
               </div>
