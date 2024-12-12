@@ -6,11 +6,11 @@
   "homepage": "https://lcespedes.dev",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && echo 'lcespedes.dev' > dist/CNAME",
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist --dotfiles true"
   },
   "dependencies": {
     "autoprefixer": "^10.4.20",
