@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://lxluxo23.github.io/curriculum",
+  "homepage": "https://lcespedes.dev",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
