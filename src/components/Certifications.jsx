@@ -10,6 +10,7 @@ const Certifications = () => {
             validation: 'https://c46e136a583f7e334124-ac22991740ab4ff17e21daf2ed577041.ssl.cf1.rackcdn.com/Certificate/ScrumFundamentalsCertified-luisestebanc%C3%A9spedessepulveda.-932279.pdf',
             icon: '🏆'
         },
+        /*
         {
             title: 'Instalación de Paneles Fotovoltaicos',
             org: 'Inacap',
@@ -17,12 +18,20 @@ const Certifications = () => {
             validation: '00980278194746652459868',
             icon: '⚡'
         },
+        */
         {
             title: 'Desarrollo de aplicaciones JAVA',
             org: 'MindHub',
             validationType: 'link',
             validation: 'https://www.credly.com/badges/2c88e9d6-41e6-4aab-8bdf-084e66cf782b',
             icon: '☕'
+        },
+        {
+            title: 'Programador Angular',
+            org: 'Edutin Academy',
+            validationType: 'link',
+            validation: 'https://app.edutin.com/verify/10410494',
+            icon: '🅰️'
         }
     ];
 
