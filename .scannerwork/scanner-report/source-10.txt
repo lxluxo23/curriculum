@@ -1,0 +1,44 @@
+import { UserInfo } from '@/types/terminal'
+import RotatingDonut from '../../ui/RotatingDonut'
+
+interface NeofetchOutputProps {
+    info: UserInfo
+}
+
+export function NeofetchOutput({ info }: NeofetchOutputProps) {
+    return (
+        <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 items-center sm:items-start">
+            {/* Donut container - responsive */}
+            <div className="w-[200px] sm:w-[250px] md:w-[300px] shrink-0">
+                <RotatingDonut />
+            </div>
+
+            {/* Info container - responsive */}
+            <div className="flex-grow text-xs sm:text-sm md:text-base">
+                <div className="text-blue-400">{info.user}@<span>{info.host}</span></div>
+                <div className="text-gray-300">---------------------</div>
+                <div className="grid gap-1">
+                    {[
+                        ['OS', info.os],
+                        ['Role', info.kernel],
+                        ['Focus', info.focus],
+                        ['Uptime', info.uptime],
+                        ['Shell', info.shell],
+                        ['Terminal', info.terminal],
+                        ['Languages', info.skills.languages.map(l => l.name).join(', ')],
+                        ['Frameworks', info.skills.frameworks.map(f => f.name).join(', ')],
+                        ['Databases', [...info.skills.databases.relational, ...info.skills.databases.nosql].join(', ')],
+                        ['DevOps', info.skills.devops.map(d => d.name).join(', ')],
+                        ['Cloud', info.skills.cloud.map(c => c.name).join(', ')],
+                        ['Testing', info.skills.testing.map(t => t.name).join(', ')]
+                    ].map(([label, value]) => (
+                        <div key={label} className="flex flex-wrap">
+                            <span className="text-yellow-400 w-24 sm:w-28 md:w-32 shrink-0">{label}:</span>
+                            <span className="text-gray-300 flex-1 break-words">{value}</span>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
+    )
+}

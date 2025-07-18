@@ -1,0 +1,12 @@
+import Terminal from './components/ui/Terminal'
+
+function App() {
+  return (
+    <main className="min-h-screen bg-gray-950">
+      <Terminal />
+    </main>
+  )
+}
+
+export default App
+

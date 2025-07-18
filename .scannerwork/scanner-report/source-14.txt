@@ -1,0 +1,169 @@
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
+import { TerminalNeofetchProps, defaultUserInfo, CommandOutput } from '@/types/terminal'
+import { CommandProcessor } from '../sections/terminal/CommandProcessor'
+import { NeofetchOutput } from '../sections/terminal/NeofetchOutput'
+
+const availableCommands = ['neofetch', 'help', 'clear', 'ls', 'pwd', 'cat'];
+
+export default function Terminal({ userInfo = {} }: TerminalNeofetchProps) {
+    const [commandHistory, setCommandHistory] = useState<CommandOutput[]>([])
+    const [currentCommand, setCurrentCommand] = useState('')
+    const [suggestion, setSuggestion] = useState('')
+    const inputRef = useRef<HTMLInputElement>(null)
+    const containerRef = useRef<HTMLDivElement>(null)
+
+    const info = useMemo(() => ({
+        ...defaultUserInfo,
+        ...userInfo
+    }), [userInfo]);
+
+    const commandProcessor = useMemo(() => new CommandProcessor(info), [info]);
+    const didRunInitialCommands = useRef(false)
+    const fileSystem = commandProcessor['fileSystem']
+    const currentPath = commandProcessor['currentPath']
+
+    useEffect(() => {
+        if (inputRef.current) {
+            inputRef.current.focus()
+        }
+    }, [])
+
+    const executeCommand = useCallback((cmd: string) => {
+        if (cmd.trim().toLowerCase() === 'neofetch') {
+            setCommandHistory(prev => [...prev, {
+                command: cmd,
+                output: <NeofetchOutput info={info} />,
+                isNeofetch: true
+            }])
+            return
+        }
+        const result = commandProcessor.processCommand(cmd)
+        if (result === null) {
+            setCommandHistory([])
+        } else {
+            setCommandHistory(prev => [...prev, result])
+        }
+    }, [info, commandProcessor])
+
+    useEffect(() => {
+        if (!didRunInitialCommands.current) {
+            executeCommand('neofetch')
+            setCurrentCommand('help')
+            didRunInitialCommands.current = true
+        }
+    }, [executeCommand])
+
+    useEffect(() => {
+        if (containerRef.current) {
+            containerRef.current.scrollTop = containerRef.current.scrollHeight
+        }
+    }, [commandHistory])
+
+
+    const getSuggestions = (value: string) => {
+        const [command, ...args] = value.split(' ')
+
+        if (!value.includes(' ')) {
+            return availableCommands.find(cmd =>
+                cmd.startsWith(value.toLowerCase())
+            )?.slice(value.length) ?? ''
+        }
+
+        if (command.toLowerCase() === 'cat' && args.length <= 1) {
+            const currentDir = fileSystem[currentPath as keyof typeof fileSystem]
+            if (currentDir) {
+                const files = Object.keys(currentDir)
+                const partialFile = args[0] || ''
+                return files.find(file =>
+                    file.startsWith(partialFile.toLowerCase())
+                )?.slice(partialFile.length) ?? ''
+            }
+        }
+        return ''
+    }
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value
+        setCurrentCommand(value)
+        setSuggestion(getSuggestions(value))
+    }
+
+    const handleKeyDown = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter') {
+            const command = currentCommand.trim()
+            if (command) {
+                executeCommand(command)
+                setCurrentCommand('')
+                setSuggestion('')
+            }
+        }
+        else if (e.key === 'Tab') {
+            e.preventDefault()
+            if (suggestion) {
+                setCurrentCommand(prev => prev + suggestion)
+                setSuggestion('')
+            }
+        }
+    }
+
+    return (
+        <div className="min-h-screen bg-gray-950 p-2 sm:p-4 lg:p-6 border-none outline-none">
+            <div className="max-w-[95vw] sm:max-w-[85vw] md:max-w-[80vw] lg:max-w-[95vw] xl:max-w-[75vw] 2xl:max-w-[65vw] mx-auto">
+                <div className="bg-gray-900 rounded-lg overflow-hidden shadow-xl">
+                    {/* Terminal header */}
+                    <div className="bg-gray-800 px-2 sm:px-4 py-1 sm:py-2 flex items-center">
+                        <div className="flex space-x-1 sm:space-x-2">
+                            <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-red-500"></div>
+                            <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-yellow-500"></div>
+                            <div className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-green-500"></div>
+                        </div>
+                        <div className="text-gray-400 text-xs sm:text-sm mx-auto">Terminal</div>
+                    </div>
+
+                    {/* Terminal content */}
+                    <div
+                        ref={containerRef}
+                        className="p-2 sm:p-4 md:p-6 font-mono text-xs sm:text-sm md:text-base 
+                                 h-[400px] sm:h-[500px] md:h-[600px] lg:h-[700px] 
+                                 overflow-y-auto relative"
+                        onClick={() => inputRef.current?.focus()}
+                    >
+                        {commandHistory.map((entry, index) => (
+                            <div key={index} className="mb-2 sm:mb-4">
+                                <div className="text-green-400 break-all">➜ {entry.command}</div>
+                                <div className={`${entry.isNeofetch ? '' : 'text-gray-300'} break-words`}>
+                                    {entry.output}
+                                </div>
+                            </div>
+                        ))}
+
+                        <div className="flex items-center relative">
+                            <span className="text-green-400">➜</span>
+                            <div className="flex-1 ml-2 relative">
+                                <input
+                                    ref={inputRef}
+                                    type="text"
+                                    value={currentCommand}
+                                    onChange={handleChange}
+                                    onKeyDown={handleKeyDown}
+                                    className="w-full bg-transparent text-gray-300 outline-none"
+                                    autoFocus
+                                />
+                                {suggestion && (
+                                    <span
+                                        className="absolute left-0 text-gray-600"
+                                        style={{
+                                            paddingLeft: `${currentCommand.length}ch`
+                                        }}
+                                    >
+                                        {suggestion}
+                                    </span>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}

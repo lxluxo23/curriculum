@@ -1,0 +1,91 @@
+import { UserInfo, CommandOutput } from '@/types/terminal'
+import { generateFileSystem } from './FileSystem'
+
+export class CommandProcessor {
+  private info: UserInfo
+  private currentPath: string
+  private fileSystem: ReturnType<typeof generateFileSystem>
+
+  constructor(info: UserInfo) {
+    this.info = info
+    this.currentPath = '/home/user'
+    this.fileSystem = generateFileSystem(info)
+  }
+
+  processCommand(cmd: string): CommandOutput | null {
+    const [command, ...args] = cmd.trim().toLowerCase().split(' ')
+
+    switch (command) {
+      case 'clear':
+        return null
+
+      case 'help':
+        return {
+          command: cmd,
+          output: this.getHelpText()
+        }
+
+      case 'pwd':
+        return {
+          command: cmd,
+          output: this.currentPath
+        }
+
+      case 'ls':
+        return this.handleLs()
+
+      case 'cat':
+        return this.handleCat(args)
+
+      default:
+        return {
+          command: cmd,
+          output: `Command not found: ${command}. Type 'help' for available commands.`
+        }
+    }
+  }
+
+  private getHelpText(): JSX.Element {
+    return (
+      <div>
+        <div><strong>neofetch</strong> - Display system information</div>
+        <div><strong>clear</strong> - Clear the terminal</div>
+        <div><strong>ls</strong> - List directory contents</div>
+        <div><strong>pwd</strong> - Print working directory</div>
+        <div><strong>cat</strong> - Read file contents</div>
+        <div><strong>help</strong> - Show this help message</div>
+      </div>
+    )
+  }
+
+  private handleLs(): CommandOutput {
+    const currentDir = this.fileSystem[this.currentPath as keyof typeof this.fileSystem]
+    return {
+      command: 'ls',
+      output: currentDir ? Object.keys(currentDir).join('  ') : 'Directory not found'
+    }
+  }
+
+  private handleCat(args: string[]): CommandOutput {
+    if (args.length === 0) {
+      return {
+        command: 'cat',
+        output: 'Usage: cat <filename>'
+      }
+    }
+
+    const currentDir = this.fileSystem[this.currentPath as keyof typeof this.fileSystem]
+    const fileName = args[0]
+    if (currentDir && currentDir[fileName as keyof typeof currentDir]) {
+      return {
+        command: 'cat ' + fileName,
+        output: currentDir[fileName as keyof typeof currentDir]
+      }
+    }
+
+    return {
+      command: 'cat ' + fileName,
+      output: `File ${fileName} not found`
+    }
+  }
+}
