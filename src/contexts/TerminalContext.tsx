@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 interface TerminalContextType {
   currentCommand: string;
-  setCurrentCommand: (command: string) => void;
+  setCurrentCommand: (command: string | ((prev: string) => string)) => void;
   executeCommand: (command: string) => void;
 }
 
@@ -22,7 +22,7 @@ interface TerminalProviderProps {
 
 export const TerminalProvider: React.FC<TerminalProviderProps> = ({ children }) => {
   const [currentCommand, setCurrentCommand] = useState('');
-  const [executeCommandCallback, setExecuteCommandCallback] = useState<((command: string) => void) | null>(null);
+  const [executeCommandCallback] = useState<((command: string) => void) | null>(null);
 
   const executeCommand = (command: string) => {
     if (executeCommandCallback) {
@@ -30,10 +30,7 @@ export const TerminalProvider: React.FC<TerminalProviderProps> = ({ children }) 
     }
   };
 
-  // This will be used by Terminal component to register its execute function
-  const registerExecuteCallback = (callback: (command: string) => void) => {
-    setExecuteCommandCallback(() => callback);
-  };
+  // Removed unused registerExecuteCallback to fix unused variable error
 
   return (
     <TerminalContext.Provider value={{ 

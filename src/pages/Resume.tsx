@@ -1,5 +1,4 @@
-import React from 'react';
-import { Mail, Phone, MapPin, Calendar, Award, Book, Briefcase, Monitor } from 'lucide-react';
+import { Mail, Phone, MapPin, Calendar} from 'lucide-react';
 import WorkExperience from '../components/cv/WorkExperience';
 import TechnicalSkills from '../components/cv/TechnicalSkills';
 import Education from '../components/cv/Education';

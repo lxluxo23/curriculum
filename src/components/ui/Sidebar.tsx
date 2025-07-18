@@ -3,7 +3,7 @@ import { Github, Linkedin, Mail, ExternalLink, User, Code, Coffee } from 'lucide
 import { useTerminal } from '../../contexts/TerminalContext';
 
 const Sidebar: React.FC = () => {
-  const { setCurrentCommand, executeCommand } = useTerminal();
+  const { setCurrentCommand } = useTerminal();
   const socialLinks = [
     {
       icon: <Github className="w-5 h-5" />,

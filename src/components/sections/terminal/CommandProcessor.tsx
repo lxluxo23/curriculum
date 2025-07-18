@@ -2,12 +2,11 @@ import { UserInfo, CommandOutput } from '@/types/terminal'
 import { generateFileSystem } from './FileSystem'
 
 export class CommandProcessor {
-  private info: UserInfo
+  // Removed unused 'info' property
   private currentPath: string
   private fileSystem: ReturnType<typeof generateFileSystem>
 
   constructor(info: UserInfo) {
-    this.info = info
     this.currentPath = '/home/user'
     this.fileSystem = generateFileSystem(info)
   }
