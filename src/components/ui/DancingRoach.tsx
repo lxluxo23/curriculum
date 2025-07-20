@@ -88,7 +88,7 @@ export default function DancingRoach() {
 
     const loader = new STLLoader()
     loader.load(
-      '/src/assets/cockroach.stl',
+      '/assets/cockroach.stl',
       function (geometry) {
         roach = new THREE.Mesh(geometry, roachMaterial)
         roach.castShadow = true

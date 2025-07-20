@@ -75,13 +75,13 @@ export default function CatModel() {
     scene.add(floor)
 
     const textureLoader = new THREE.TextureLoader()
-    const texture = textureLoader.load('/src/assets/uiacat/textures/Muchkin2_BaseColor.png')
+    const texture = textureLoader.load('/assets/uiacat/textures/Muchkin2_BaseColor.png')
 
     let cat: THREE.Object3D | null = null
     const loader = new FBXLoader()
 
     loader.load(
-      '/src/assets/uiacat/source/OiiaioooooiaiFin.fbx',
+      '/assets/uiacat/source/OiiaioooooiaiFin.fbx',
       (object) => {
         cat = object
         object.traverse((child: THREE.Object3D) => {

@@ -36,7 +36,7 @@ const WorkExperience: React.FC = () => {
   const experiences: Experience[] = [
     {
       company: "Valposystems",
-      period: "Octubre 2023 - actualidad",
+      period: "Octubre 2023 - Mayo 2025",
       location: "Talca, Chile",
       position: "Programador Full Stack",
       projects: [
