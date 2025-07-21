@@ -44,7 +44,6 @@ export const MatrixMusicPlayer: React.FC = () => {
   const [volume, setVolume] = useState(0.05);
   const [isMuted, setIsMuted] = useState(false);
   const [isDraggingVolume, setIsDraggingVolume] = useState(false);
-  const [isInitialized, setIsInitialized] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
   const volumeSliderRef = useRef<HTMLDivElement>(null);
 
