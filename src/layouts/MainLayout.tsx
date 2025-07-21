@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import Sidebar from '../components/ui/Sidebar';
 import Header from '../components/ui/Header';
 import InteractiveBackground from '../components/ui/InteractiveBackground';
+import { MatrixMusicPlayer } from '../components/ui/MatrixMusicPlayer';
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -40,6 +41,9 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
           {children}
         </div>
       </main>
+      
+      {/* Matrix Music Player */}
+      <MatrixMusicPlayer />
       
       {/* Responsive overlay for mobile - oculta sidebar en pantallas pequeñas */}
       <div className="lg:hidden fixed inset-0 bg-gray-950 z-50 flex items-center justify-center">
