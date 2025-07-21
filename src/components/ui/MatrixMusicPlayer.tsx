@@ -1,43 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useTheme } from '../../contexts/ThemeContext';
-
-interface Track {
-  title: string;
-  artist: string;
-  url: string;
-  image?: string;
-}
-
-const matrixTracks: Track[] = [
-  {
-    title: "Direct Lounge",
-    artist: "SleepCircle",
-    url: "./sounds/matrix/Direct_Lounge_ENAwave.mp3",
-    image: "./sounds/matrix/directLounge.png"
-  },
-  {
-    title: "Synthepanzer", 
-    artist: "Telan Devik",
-    url: "./sounds/matrix/Telan_Devik_-_Music_for_Anti-Gravity_Racing_Games_-_05_Synthepanzer.mp3",
-    image: "./sounds/matrix/Synthepanzer.png"
-  },
-  {
-    title: "Yokai Disco",
-    artist: "Telan Devik", 
-    url: "./sounds/matrix/Telan_Devik_-_Yokai_disco.mp3",
-    image: "./sounds/matrix/yokai-disco.png"
-  },
-  {
-    title: "Technopolis",
-    artist: "YMO (Isao Takaku cover)",
-    url: "./sounds/matrix/YMO__Technopolis__mixed_2008.mp3",
-    image: "./sounds/matrix/ymoTechnopolis.jpg"
-  }
-];
+import { matrixPlaylist } from '../../data/playlists';
 
 export const MatrixMusicPlayer: React.FC = () => {
   const { theme } = useTheme();
-  const [currentTrack, setCurrentTrack] = useState(() => Math.floor(Math.random() * matrixTracks.length));
+  const [currentTrack, setCurrentTrack] = useState(() => Math.floor(Math.random() * matrixPlaylist.length));
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -62,7 +29,7 @@ export const MatrixMusicPlayer: React.FC = () => {
     };
     
     const handleEnded = () => {
-      const nextTrack = (currentTrack + 1) % matrixTracks.length;
+      const nextTrack = (currentTrack + 1) % matrixPlaylist.length;
       setCurrentTrack(nextTrack);
       setIsPlaying(false);
       
@@ -77,7 +44,7 @@ export const MatrixMusicPlayer: React.FC = () => {
     
     const handleError = (e: any) => {
       console.error('Audio error:', e);
-      setCurrentTrack((prev) => (prev + 1) % matrixTracks.length);
+      setCurrentTrack((prev) => (prev + 1) % matrixPlaylist.length);
     };
 
     audio.addEventListener('timeupdate', updateTime);
@@ -198,9 +165,9 @@ export const MatrixMusicPlayer: React.FC = () => {
     const wasPlaying = isPlaying;
     
     if (direction === 'next') {
-      setCurrentTrack((prev) => (prev + 1) % matrixTracks.length);
+      setCurrentTrack((prev) => (prev + 1) % matrixPlaylist.length);
     } else {
-      setCurrentTrack((prev) => (prev - 1 + matrixTracks.length) % matrixTracks.length);
+      setCurrentTrack((prev) => (prev - 1 + matrixPlaylist.length) % matrixPlaylist.length);
     }
     
     setIsPlaying(false);
@@ -500,10 +467,10 @@ export const MatrixMusicPlayer: React.FC = () => {
           
           {/* Album Art */}
           <div className="joel-album-art">
-            {matrixTracks[currentTrack].image ? (
+            {matrixPlaylist[currentTrack].image ? (
               <img 
-                src={matrixTracks[currentTrack].image}
-                alt={matrixTracks[currentTrack].title}
+                src={matrixPlaylist[currentTrack].image}
+                alt={matrixPlaylist[currentTrack].title}
                 onError={(e) => {
                   e.currentTarget.style.display = 'none';
                 }}
@@ -548,7 +515,7 @@ export const MatrixMusicPlayer: React.FC = () => {
               </div>
               
               <div className="joel-track-title">
-                {matrixTracks[currentTrack].title} - {matrixTracks[currentTrack].artist}
+                {matrixPlaylist[currentTrack].title} - {matrixPlaylist[currentTrack].artist}
               </div>
               
               <div className="joel-time">
@@ -602,7 +569,7 @@ export const MatrixMusicPlayer: React.FC = () => {
       {/* Audio element */}
       <audio
         ref={audioRef}
-        src={matrixTracks[currentTrack].url}
+        src={matrixPlaylist[currentTrack].url}
         onPlay={() => setIsPlaying(true)}
         onPause={() => setIsPlaying(false)}
         onLoadedData={() => {
